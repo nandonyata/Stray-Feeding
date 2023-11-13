@@ -3,6 +3,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/nandonyata/Stray-Fedding/exception"
 	"go.mongodb.org/mongo-driver/bson"
@@ -10,8 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func NewMongoDatabase() *mongo.Client {
-	// uri := os.Getenv("MONGO_URI")
+func NewMongoDatabase() *mongo.Database {
 	uri := "mongodb://localhost:27017"
 
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
@@ -28,10 +28,15 @@ func NewMongoDatabase() *mongo.Client {
 
 	// Send a ping to confirm a successful connection
 	var result bson.M
-	if err := client.Database("admin").RunCommand(context.TODO(), bson.D{{"ping", 1}}).Decode(&result); err != nil {
-		panic(err)
-	}
+	err = client.Database("golang").RunCommand(context.TODO(), bson.D{{"ping", 1}}).Decode(&result)
+	exception.PanicIfNeeded(err)
 
 	fmt.Println("Pinged your deployment. You successfully connected to MongoDB!")
-	return client
+
+	database := client.Database("golang")
+	return database
+}
+
+func NewMongoContext() (context.Context, context.CancelFunc) {
+	return context.WithTimeout(context.Background(), 10*time.Second)
 }
