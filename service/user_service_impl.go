@@ -18,6 +18,7 @@ type userServiceImpl struct {
 
 func (service *userServiceImpl) Create(request model.CreateUserRequest) (response model.CreateUserResponse) {
 	user := entity.User{
+		Id:       request.Id,
 		Email:    request.Email,
 		Password: request.Password,
 	}
@@ -25,6 +26,7 @@ func (service *userServiceImpl) Create(request model.CreateUserRequest) (respons
 	service.UserRepository.Insert(user)
 
 	response = model.CreateUserResponse{
+		Id:       user.Id,
 		Email:    user.Email,
 		Password: user.Password,
 	}

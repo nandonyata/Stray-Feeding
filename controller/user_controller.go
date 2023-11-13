@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/nandonyata/Stray-Fedding/exception"
 	"github.com/nandonyata/Stray-Fedding/model"
 	"github.com/nandonyata/Stray-Fedding/service"
@@ -29,6 +30,8 @@ func (controller *UserController) Create(c *fiber.Ctx) error {
 	var req model.CreateUserRequest
 
 	err := c.BodyParser(&req)
+	req.Id = uuid.New().String()
+
 	exception.PanicIfNeeded(err)
 
 	resp := controller.UserService.Create(req)

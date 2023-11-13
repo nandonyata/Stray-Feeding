@@ -23,6 +23,7 @@ func (repo *userRepositoryImpl) Insert(user entity.User) {
 	defer cancel()
 
 	_, err := repo.Collection.InsertOne(ctx, bson.M{
+		"_id":      user.Id,
 		"email":    user.Email,
 		"password": user.Password,
 	})

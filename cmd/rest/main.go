@@ -14,7 +14,7 @@ const PORT = ":3000"
 
 func main() {
 	// Setup Database
-	database := config.NewMongoDatabase()
+	database := config.GetMongoDatabase()
 
 	// Setup Repository
 	userRepository := repository.NewUserRepository(database)
